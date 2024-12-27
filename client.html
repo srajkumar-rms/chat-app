@@ -56,6 +56,15 @@
             messageList.appendChild(messageElement)
         })
 
+        // Display message on UI
+        socket.on('load_messages', (messages)=>{
+            messages.forEach(message=>{
+                const messageElement = document.createElement("div")
+                messageElement.innerText= new Date(message.timestamp).toDateString()+":-"+message.username+":-"+message.message
+                messageList.appendChild(messageElement)
+            })
+        })
+
     </script>
 </body>
 </html>
