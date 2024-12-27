@@ -2,6 +2,8 @@ import express from 'express'
 import { Server } from 'socket.io'
 import http from 'http'
 import cors from 'cors'
+import { connect } from './config.js'
+import { ChatModel } from './chat.schema.js'
 
 const app = express()
 
@@ -29,6 +31,13 @@ io.on('connection',(socket)=>{
             username: socket.username,
             message: message
         }
+        const newChat = new ChatModel({
+            username: socket.username,
+            message: message,
+            timestamp: new Date()
+        })
+        newChat.save()
+
         //broadcast this message to all clients
         socket.broadcast.emit('broadcast_message',userMessage)
 
@@ -42,5 +51,6 @@ io.on('connection',(socket)=>{
 
 server.listen(3000,()=>{
     console.log('App is listinging on 3000');
+    connect()
     
 })
